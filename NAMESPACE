@@ -1,0 +1,9 @@
+useDynLib(missDeaths)
+importFrom(Rcpp, evalCpp)
+export(md.D)
+export(md.impute)
+export(md.survnp)
+export(md.survcox)
+
+importFrom("mitools", MIcombine)
+import(survival, rms, relsurv)
