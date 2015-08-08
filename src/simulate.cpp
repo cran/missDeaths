@@ -124,9 +124,9 @@ Rcpp::NumericVector SimulateAge(Rcpp::NumericVector treatment, SampleGenParams p
   Rcpp::NumericVector age;
   
 #ifdef UNIFORM_AGE
-  age = runif(treatment.length(), -1, 1);
+  age = runif((int)treatment.length(), -1, 1);
 #else
-  age = rnorm(treatment.length());
+  age = rnorm((int)treatment.length());
 #endif
 
   for (int i = 0; i < treatment.length(); i++)

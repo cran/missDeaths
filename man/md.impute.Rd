@@ -38,7 +38,6 @@ Stupnik T., Pohar Perme M. (2013). "Analysing disease recurrence with missing at
   \code{\link{md.survcox}}
 }
 \examples{
-\dontrun{
 library(missDeaths)
 data(slopop)
 
@@ -64,5 +63,4 @@ plot(surv.net)
 surv.efs = survfit(Surv(newtimes, 1 * (observed$status | (newtimes != observed$time)))~1)
 summary(surv.efs, times=c(3,9)*365.2425)
 plot(surv.efs)
-}
 }

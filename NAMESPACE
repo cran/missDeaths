@@ -6,4 +6,5 @@ export(md.survnp)
 export(md.survcox)
 
 importFrom("mitools", MIcombine)
-import(survival, rms, relsurv)
+importFrom("stats", qchisq)
+import(survival, rms, relsurv, cmprsk)

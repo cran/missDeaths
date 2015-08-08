@@ -116,22 +116,3 @@ BEGIN_RCPP
     return __sexp_result;
 END_RCPP
 }
-
-
-//rcpp_SimCensorX
-SEXP exSimCensorX(Rcpp::DataFrame data1, /*double interval,*/ SEXP form, int maxiter);
-RcppExport SEXP missDeaths_rcpp_exSimCensorX(SEXP dSEXP, /*SEXP iSEXP,*/ SEXP fSEXP, SEXP mSEXP) {
-BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< DataFrame >::type data1(dSEXP);
-        Rcpp::traits::input_parameter< int >::type maxiter(mSEXP);
-
-        SEXP __result = exSimCensorX(data1, fSEXP, maxiter);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
-END_RCPP
-}

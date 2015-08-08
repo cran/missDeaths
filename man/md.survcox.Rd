@@ -50,11 +50,11 @@ observed$time = observed$time*365.2425
 D = md.D(age=observed$age*365.2425, sex=observed$sex, year=(observed$year - 1960)*365.2425)
 
 #fit a cox model (NOTE: estimated std error is slightly underestimated!)
-cox = md.survcox(observed, Surv(time, status) ~ age + sex + iq + elevation, 
+md.survcox(observed, Surv(time, status) ~ age + sex + iq + elevation, 
   observed$maxtime*365.2425, D, slopop, iterations=4, R=1)
 
 #multiple imputations to correct the stimated std error
-mi = md.survcox(observed, Surv(time, status) ~ age + sex + iq + elevation, 
+md.survcox(observed, Surv(time, status) ~ age + sex + iq + elevation, 
   observed$maxtime*365.2425, D, slopop, iterations=4, R=50)
 }
 }

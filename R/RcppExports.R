@@ -31,31 +31,6 @@ rcpp_exSimCensorX <- function(data1, form, maxiter) {
 
 #library functions
 
-md.checkdata <- function(data)
-{
-  if ((min(D$time) < 0) || (max(D$time) > 130))
-    stop("column 'time' is not available in 'data' \n")
-  if (!("status" %in% names(data)))
-    stop("column 'status' is not available in 'data' \n")
-  if (!("maxtime" %in% names(data)))
-    stop("column 'maxtime' is not available in 'data' \n")
-  
-  statuslevels = levels(as.factor(data$status))
-  
-   for (i in 1:length(statuslevels))
-    if (!(statuslevels[i] %in% c("0", "1")))
-      stop ("censoring indicator 'status' can only contain values 0 and 1")
-  
-    stop ("values in column 'time' out of bounds, should be inside [0, 130] years")
-  if ((min(data$maxtime) < 0) || (max(data$maxtime) > 130))
-    stop ("values in column 'maxtime' out of bounds, should be inside [0, 130] years")
-  
-  if(any((data$time > data$maxtime) & (data$status == 1)))
-    stop ("Events are observed after administrative censoring \n")	
-  if(any((data$time != data$maxtime) & (data$status == 0)))
-    stop ("Only administrative censoring is allowed - max times should be reported for all individuals \n")
-}
-
 md.D <- function(age, sex, year)
 {
   D = data.frame(age=age, sex=sex, year=year)
@@ -109,9 +84,6 @@ md.survnp <- function(time, status, maxtime, D, ratetable, conf.int=0.95)
   
 md.survcox <- function(data, f, maxtime, D, ratetable, iterations=4, R = 50)
 {  
-  #require(survival)
-  #require(rms)
-
   D$year = D$year-D$age
   D$year = 1960 + D$year / 365.2425
   ff = deparse(f)

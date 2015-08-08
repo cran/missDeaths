@@ -6,12 +6,12 @@ using namespace Rcpp;
 using namespace std;
 
 // [[Rcpp::export]]
-SEXP SimCensor1(Rcpp::NumericVector time1, Rcpp::NumericVector status1, Rcpp::DataFrame D1)
+SEXP SimCensor1(Rcpp::NumericVector time1, Rcpp::IntegerVector status1, Rcpp::DataFrame D1)
 {
   try
   {
     Rcpp::NumericVector recurrence = Rcpp::clone(time1);
-    Rcpp::NumericVector status = Rcpp::clone(status1);
+    Rcpp::IntegerVector status = Rcpp::clone(status1);
     Rcpp::DataFrame D = Rcpp::clone(D1);
  
     Rcpp::NumericVector age = Rcpp::wrap(D["age"]);
@@ -34,12 +34,12 @@ SEXP SimCensor1(Rcpp::NumericVector time1, Rcpp::NumericVector status1, Rcpp::Da
 }
 
 // [[Rcpp::export]]
-SEXP SimCensor2(Rcpp::NumericVector time1, Rcpp::NumericVector status1, Rcpp::DataFrame D1)
+SEXP SimCensor2(Rcpp::NumericVector time1, Rcpp::IntegerVector status1, Rcpp::DataFrame D1)
 {
   try
   {
     Rcpp::NumericVector recurrence = Rcpp::clone(time1);
-    Rcpp::NumericVector status = Rcpp::clone(status1);
+    Rcpp::IntegerVector status = Rcpp::clone(status1);
     Rcpp::DataFrame D = Rcpp::clone(D1);
     
     Rcpp::Environment stats("package:stats");
@@ -102,7 +102,7 @@ SEXP SimCensorX(Rcpp::DataFrame data1, Rcpp::NumericVector maxtime1, Rcpp::Chara
    
     Rcpp::DataFrame data = Rcpp::clone(data1);
     Rcpp::NumericVector time = Rcpp::wrap(data[colTime]);
-    Rcpp::NumericVector status = Rcpp::wrap(data[colStatus]);
+    Rcpp::IntegerVector status = Rcpp::wrap(data[colStatus]);
     Rcpp::NumericVector recurrence = SimCensor2(time, status, D); 
     Rcpp::NumericVector maxTime = Rcpp::clone(maxtime1);
    
@@ -117,7 +117,7 @@ SEXP SimCensorX(Rcpp::DataFrame data1, Rcpp::NumericVector maxtime1, Rcpp::Chara
       Rcpp::List cox = cph(formula, data, Rcpp::Named("surv") = t);
      
       Rcpp::NumericVector coxtime = cox["time"];  
-      Rcpp::NumericVector times(min(100, coxtime.length()));
+      Rcpp::NumericVector times(min((R_xlen_t)100, (R_xlen_t)coxtime.length()));
       for (int j = 0; j < times.length(); j++)
         times[j] = coxtime[round(((double)coxtime.length() - 1) * j / (times.length() - 1))];
                
