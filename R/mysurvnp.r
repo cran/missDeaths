@@ -30,6 +30,8 @@ my.survnp <- function(tt,st,R,ratetable,konc,conf.int=0.95){
 	Yosebni <- rep(1,nrow(data))						#Yosebni je verjetnost, da je se ziv v populaciji
 	Yosebnin <- Spicum  <- rep(1,nrow(data))				#Spicum potrebujemo za net survival, na zacetku 1 za vse, Yosebnin je za net
 
+	Y.efs = Y.net = rep(0, length(ttun))
+
 	for(it in 1:length(ttun)){
 		#population survival probabilities
 		Spi <- relsurv:::exp.prep(R,difft[it],ratetable)			#populacijska verjetnost, da zivijo se naprej
@@ -51,11 +53,12 @@ my.survnp <- function(tt,st,R,ratetable,konc,conf.int=0.95){
 		Nesp <- sum(Neisp)						#stevilo dogodkov ob tem casu v hyp world
 		
 		#hazard - net
-		Yoni <- sum(Yosebni/Spicum)					#number at risk in hyp world
+		Y.net[it] = Yoni <- sum(Yosebni/Spicum)					#number at risk in hyp world
 		le.net[it] <- Nesp/Yoni						#trenutno tveganje
 		vari.net[it] <- sum(Nei/Spicum^2)/Yoni^2			#prirastek k varianci
 
 		#hazard - event free
+		Y.efs[it] = sum(Yosebni)
 		le.efs[it] <- (Ne+Np)/sum(Yosebni)				#trenutno tveganje
 		vari.efs[it] <- sum((Nei + Npi)^2)/sum(Yosebni)^2		#prirastek k varianci
 
@@ -87,7 +90,8 @@ my.survnp <- function(tt,st,R,ratetable,konc,conf.int=0.95){
 	
 	out <- list(time=c(0,ttun),
 	surv.net=surv.net,std.err.net=sqrt(vari.net),lower.net=lower.net,upper.net=upper.net,
-	surv.efs=surv.efs,std.err.efs=sqrt(vari.efs),lower.efs=lower.efs,upper.efs=upper.efs
+	surv.efs=surv.efs,std.err.efs=sqrt(vari.efs),lower.efs=lower.efs,upper.efs=upper.efs,
+	Y.net, Y.efs
 	)
 	
 	out

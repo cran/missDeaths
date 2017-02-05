@@ -39,18 +39,21 @@ public:
   double SdAge;
   double MinAge;
   double MaxAge;
+  double Skew;
   
   AgeGenParams()
   {
     MeanAge = MinAge = MaxAge = 50;
     SdAge = 0;
+    Skew = 0;
   }
   AgeGenParams(Rcpp::List list, char* name)
   {
     MeanAge = 50;
     MinAge = 0;
     MaxAge = 100;
-    SdAge = 0;    
+    SdAge = 0; 
+    Skew = 0;
     
     try
     {
@@ -59,6 +62,7 @@ public:
       SdAge = GetParam(sublist, (char*)"sd", MeanAge);
       MinAge = GetParam(sublist, (char*)"min", MinAge);
       MaxAge = GetParam(sublist, (char*)"max", MaxAge);
+      Skew = GetParam(sublist, (char*)"skew", Skew);
     }
     catch(...){}
   }
@@ -116,7 +120,7 @@ public:
   }
 };
 
-Rcpp::NumericVector SimulateAge(Rcpp::NumericVector treatment, SampleGenParams params)
+Rcpp::NumericVector SimulateAge(Rcpp::NumericVector treatment, Rcpp::NumericVector sex, SampleGenParams params)
 {
   Rcpp::Environment stats("package:stats");
   Rcpp::Function runif = stats["runif"]; 
@@ -125,6 +129,17 @@ Rcpp::NumericVector SimulateAge(Rcpp::NumericVector treatment, SampleGenParams p
   
 #ifdef UNIFORM_AGE
   age = runif((int)treatment.length(), -1, 1);
+  for (int i = 0; i < treatment.length(); i++)
+  {
+    double p = (treatment[i] == 0) ? params.Treatment0Age.Skew : params.Treatment1Age.Skew;
+    p = (sex[i] == 1) ? -p : p;
+    p = max(-0.9, min(p, 0.9));
+
+    if (age[i] < p)
+      age[i] = -1 + (-1 - age[i])/(-1 - p);
+    else
+      age[i] = 1 - (1 - age[i])/(1 - p);
+  }
 #else
   age = rnorm((int)treatment.length());
 #endif
@@ -182,7 +197,7 @@ SEXP Sample(Rcpp::List paramsList)
     Rcpp::NumericVector elevation = runif(params.N);
     Rcpp::NumericVector dummy = runif(params.N);
   
-    Rcpp::NumericVector age = SimulateAge(treatment, params);
+    Rcpp::NumericVector age = SimulateAge(treatment, sex, params);
     Rcpp::IntegerVector birthYear(params.N);  
     double meanAge = 0;
     for (int i = 0; i < params.N; i++)
@@ -228,10 +243,12 @@ SEXP Sample(Rcpp::List paramsList)
 }
 
 // [[Rcpp::export]]
-SEXP Resample(Rcpp::DataFrame data)
+SEXP Resample(Rcpp::DataFrame data1)
 {
   try
   {
+    Rcpp::DataFrame data = Rcpp::clone(data1);
+    
     Rcpp::NumericVector age = data["age"];
     Rcpp::NumericVector sex = data["sex"];
     Rcpp::IntegerVector birthYear = data["year"];
@@ -262,10 +279,12 @@ SEXP Resample(Rcpp::DataFrame data)
 }
 
 // [[Rcpp::export]]
-SEXP BlindDeath(Rcpp::DataFrame data, bool zombies)//, double interval)
+SEXP BlindDeath(Rcpp::DataFrame data1, bool zombies)//, double interval)
 {
   try
   {
+    Rcpp::DataFrame data = Rcpp::clone(data1);
+    
     Rcpp::List myList;
     Rcpp::CharacterVector oldnamevec = data.names();
     Rcpp::CharacterVector namevec;
@@ -283,14 +302,14 @@ SEXP BlindDeath(Rcpp::DataFrame data, bool zombies)//, double interval)
     Rcpp::IntegerVector status(data.nrows());
     myList.push_back(status);
     namevec.push_back("status");
-  
+    
     myList.attr("names") = namevec;
     Rcpp::DataFrame blinddata(myList);
-   
+    
     status = blinddata["status"];
     Rcpp::NumericVector recurrence = blinddata["time"];
     Rcpp::NumericVector maxTime = blinddata["maxtime"];
-     
+    
     Rcpp::NumericVector recurrint = data["event"];
     Rcpp::NumericVector deathint = data["death"];
     for (int i = 0; i < data.nrows(); i++)

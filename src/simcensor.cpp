@@ -8,6 +8,9 @@ using namespace std;
 // [[Rcpp::export]]
 SEXP SimCensor1(Rcpp::NumericVector time1, Rcpp::IntegerVector status1, Rcpp::DataFrame D1)
 {
+  if (SurvExpCache != NULL)
+    throw std::range_error("SurvExpCache is NULL");
+  
   try
   {
     Rcpp::NumericVector recurrence = Rcpp::clone(time1);
@@ -36,6 +39,9 @@ SEXP SimCensor1(Rcpp::NumericVector time1, Rcpp::IntegerVector status1, Rcpp::Da
 // [[Rcpp::export]]
 SEXP SimCensor2(Rcpp::NumericVector time1, Rcpp::IntegerVector status1, Rcpp::DataFrame D1)
 {
+  if (SurvExpCache != NULL)
+    throw std::range_error("SurvExpCache is NULL");
+  
   try
   {
     Rcpp::NumericVector recurrence = Rcpp::clone(time1);
@@ -68,7 +74,10 @@ SEXP SimCensor2(Rcpp::NumericVector time1, Rcpp::IntegerVector status1, Rcpp::Da
 // [[Rcpp::export]]
 SEXP SimCensorX(Rcpp::DataFrame data1, Rcpp::NumericVector maxtime1, Rcpp::CharacterVector form1, Rcpp::DataFrame D1, int maxiter)
 { 
-  //  try
+  if (SurvExpCache != NULL)
+    throw std::range_error("SurvExpCache is NULL");
+  
+  //try
   {
     Rcpp::Environment rms("package:rms");
     Rcpp::Environment stats("package:stats");
@@ -93,7 +102,7 @@ SEXP SimCensorX(Rcpp::DataFrame data1, Rcpp::NumericVector maxtime1, Rcpp::Chara
     }
     
     if (colTime.empty() || colStatus.empty())
-    throw std::range_error("");
+      throw std::range_error("");
     
     Rcpp::DataFrame D = Rcpp::clone(D1);
     Rcpp::NumericVector age = Rcpp::wrap(D["age"]);
@@ -105,7 +114,7 @@ SEXP SimCensorX(Rcpp::DataFrame data1, Rcpp::NumericVector maxtime1, Rcpp::Chara
     Rcpp::IntegerVector status = Rcpp::wrap(data[colStatus]);
     Rcpp::NumericVector recurrence = SimCensor2(time, status, D); 
     Rcpp::NumericVector maxTime = Rcpp::clone(maxtime1);
-   
+    
     Rcpp::Formula formula = Rcpp::Formula(form1);
     for (int l = 0; l < maxiter; l++)
     {
@@ -183,6 +192,6 @@ SEXP SimCensorX(Rcpp::DataFrame data1, Rcpp::NumericVector maxtime1, Rcpp::Chara
     }
     return Rcpp::wrap(recurrence);
   }
-  //  catch(...){}
+  //catch(...){}
   throw std::range_error("Unknown SimCensorX() Error");
 }

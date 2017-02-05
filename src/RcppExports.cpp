@@ -6,17 +6,14 @@
 using namespace Rcpp;
 
 //rcpp_SurvExpInit
-void SurvExpInit(int precision, int start, int end, SEXP poptable);
-RcppExport SEXP missDeaths_rcpp_SurvExpInit(SEXP pSEXP, SEXP sSEXP, SEXP eSEXP, SEXP popSEXP) {
+void SurvExpInit(SEXP poptable);
+RcppExport SEXP missDeaths_rcpp_SurvExpInit(SEXP popSEXP) {
 BEGIN_RCPP
     {
         Rcpp::RNGScope __rngScope;
         Rcpp::traits::input_parameter< SEXP >::type poptable(popSEXP);
-        Rcpp::traits::input_parameter< int >::type precision(pSEXP );
-        Rcpp::traits::input_parameter< int >::type end(eSEXP);
-        Rcpp::traits::input_parameter< int >::type start(sSEXP);
 
-        SurvExpInit(precision, start, end, poptable);
+        SurvExpInit(poptable);
     }
     return R_NilValue;
 END_RCPP

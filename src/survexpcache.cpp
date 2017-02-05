@@ -1,5 +1,6 @@
 #include <Rcpp.h>
 #include <string>
+#include <time.h>
 #include "survexpcache.h"
 
 using namespace std;
@@ -102,6 +103,7 @@ private:
   SurvCurve** FemaleCache;
   SurvCurve** MaleCache;
   int Length;
+  SEXP RateTable;
   
   void InitCache(int start, int end, Rcpp::NumericVector times, int sex, SurvCurve** cache, SEXP poptable)
   {
@@ -125,9 +127,15 @@ private:
   }
   
 public:
-  SurvExp(int precision, int start, int end, SEXP poptable)
+  SurvExp(SEXP poptable)
   { 
-    if (end < start) end = start;
+    time_t t = time(NULL);
+    struct tm tm = *localtime(&t);
+    
+    int precision = 12;
+    int start = 1850;
+    int end = tm.tm_year + 1900;
+    
     Length = end - start + 1;
     FemaleCache = new SurvCurve*[Length];
     MaleCache = new SurvCurve*[Length];
@@ -138,6 +146,11 @@ public:
     
     InitCache(start, end, times, 1, MaleCache, poptable);
     InitCache(start, end, times, 2, FemaleCache, poptable);
+    RateTable = poptable;
+  }
+  bool Check(SEXP poptable)
+  {
+    return (RateTable == poptable);
   }
   SurvCurve* Get(int year, int sex)
   {
@@ -146,24 +159,29 @@ public:
     for (int i = 0; i < Length; i++)
       if(cache[i]->BirthYear() == year)
         return cache[i];
+
     return NULL;
   }
 };
 
-SurvExp* SurvExpCache;
+//SurvExp* SurvExpCache;
 
 // [[Rcpp::export]]
-void SurvExpInit(int precision, int start, int end, SEXP poptable)
+void SurvExpInit(SEXP poptable)
 {
-  SurvExpCache = new SurvExp(precision, start, end, poptable);
+  if (SurvExpCache != NULL)
+    if (SurvExpCache->Check(poptable))
+      return;
+    
+  SurvExpCache = new SurvExp(poptable);
 }
 
 // [[Rcpp::export]]
-SEXP SurvProbability(int year, double age, int sex)
+SEXP SurvProbability(int birthyear, double age, int sex)
 {
   if (SurvExpCache != NULL)
   {
-    SurvCurve* curve = SurvExpCache->Get(year, sex);
+    SurvCurve* curve = SurvExpCache->Get(birthyear, sex);
     if (curve != NULL)
       return Rcpp::wrap(curve->Probability(age));//-curve->Probability2(age));
   }
@@ -172,22 +190,22 @@ SEXP SurvProbability(int year, double age, int sex)
 
 
 // [[Rcpp::export]]
-SEXP SurvTimeX(int year, double probability, int sex)
+SEXP SurvTimeX(int birthyear, double probability, int sex)
 {
   if (SurvExpCache != NULL)
   {
-    SurvCurve* curve = SurvExpCache->Get(year, sex);
+    SurvCurve* curve = SurvExpCache->Get(birthyear, sex);
     if (curve != NULL)
       return Rcpp::wrap(curve->Age(probability));
   }
   return Rcpp::wrap(-1);
 }
 
-double SurvTime(int year, double age, double probability, int sex)
+double SurvTime(int birthyear, double age, double probability, int sex)
 {
   if (SurvExpCache != NULL)
   {
-    SurvCurve* curve = SurvExpCache->Get(year, sex);
+    SurvCurve* curve = SurvExpCache->Get(birthyear, sex);
     if (curve != NULL)
       return curve->Time(age, probability);
   }
