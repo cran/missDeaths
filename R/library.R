@@ -66,19 +66,31 @@ setMethod("md.generate", "md.sex", function(.Object, .data, .param){
 })
 setClass("md.sample", representation(
   values = "numeric",
+  dates = "Date",
   weights = "numeric"
 ), contains = "md.simdataobject")
 setMethod("initialize", "md.sample", function(.Object, x, y, z){ 
   .Object = callNextMethod(.Object, x)
-  .Object@values = y
+  
   .Object@weights = rep(1, length(y))
   if (!is.null(z))
     .Object@weights = z
+
+  if (class(y) == "Date")
+  {
+    .Object@dates = y
+    .Object@values = as.numeric(y)
+  }
+  else
+    .Object@values = y
   .Object@center = sum(.Object@weights * .Object@values)/sum(.Object@weights)
   .Object
 })
 setMethod("md.generate", "md.sample", function(.Object, .data, .param){ 
-  data = data.frame(sample(.Object@values, dim(.data)[1], replace=TRUE, .Object@weights))
+  if (is.null(.Object@dates))
+    data = data.frame(sample(.Object@values, dim(.data)[1], replace=TRUE, .Object@weights))
+  else
+    data = data.frame(sample(.Object@dates, dim(.data)[1], replace=TRUE, .Object@weights))
   names(data) = c(.Object@name)
   data
 })
@@ -324,8 +336,8 @@ setMethod("+", c("md.simdata", "md.simdataobject"), function(e1, e2) {
 #'           md.uniform("Z1") +
 #'           md.mvnorm(c("Z2", "Z3"), c(100, 0), matrix(c(225, 3, 2, 1), 2, 2)) +
 #'           md.sample("Z4", c(1, 2, 3, 4), c(0.25, 0.25, 0.25, 0.25)) +
-#'           md.dateuniform("birth", as.Date("1930-1-1"), as.Date("1930-1-1")) +
-#'           md.dateuniform("start", as.Date("1930-2-1"), as.Date("1930-2-1")) +
+#'           md.dateuniform("birth", as.Date("1930-1-1"), as.Date("1960-1-1")) +
+#'           md.value("start", as.Date("1990-1-1")) +
 #'           md.death("death", ratetable, "sex", "birth", "start") +
 #'           md.eval("age", "as.numeric(start - birth)/365.2425", 80, FALSE) + 
 #'           md.exp("event", "start", c("age", "sex", "Z1", "Z2"), 
@@ -358,7 +370,7 @@ md.simulate = function(sim, N){
 #' The parameters specifying covariates and event time variables are appended to the md.simparams by 
 #' adding the appropriate function call
 #' 
-#' @seealso \code{\link{md.uniform}}, \code{\link{md.binom}}, \code{\link{md.norm}}, \code{\link{md.mvnorm}}, \code{\link{md.sex}}, \code{\link{md.dateuniform}}, \code{\link{md.exp}}, \code{\link{md.death}}
+#' @seealso \code{\link{md.value}}, \code{\link{md.uniform}}, \code{\link{md.binom}}, \code{\link{md.norm}}, \code{\link{md.mvnorm}}, \code{\link{md.sex}}, \code{\link{md.dateuniform}}, \code{\link{md.exp}}, \code{\link{md.death}}
 #' @examples
 #' 
 #' \dontrun{
@@ -501,6 +513,26 @@ md.mvnorm = function(names, means = rep(0, length(names)), cov = diag(ncol(names
 #' }
 #' @export md.sample
 md.sample = function(name, array, weights=NULL) { new("md.sample", name, array, weights) }
+
+
+#' md.value
+#' 
+#' Creates information of a covariate that contains a fixed value.
+#' This function call must be added to the \code{\link{md.simparams}} object.
+#' 
+#' @param name name of the covariate
+#' @param value value of the covariate
+#' @usage md.value(name, value)
+#' @examples
+#' 
+#' \dontrun{
+#' library(missDeaths)
+#' 
+#' sim = md.simparams() +
+#'    md.value("start", as.Date("1990-1-1")) 
+#' }
+#' @export md.value
+md.value = function(name, value) { new("md.sample", name, value, NULL) }
 
 
 #' md.dateuniform

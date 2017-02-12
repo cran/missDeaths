@@ -1,9 +1,7 @@
 #' @useDynLib missDeaths
 #' @importFrom Rcpp evalCpp
 
-#export(rcpp_Sample)
 #export(rcpp_SurvExpInit)
-#export(rcpp_BlindDeath)
 #export(rcpp_SurvTime)
 #export(rcpp_SimCensorX)
 #export(md.fixsample)

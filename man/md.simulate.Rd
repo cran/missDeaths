@@ -25,8 +25,8 @@ sim = md.simparams() +
           md.uniform("Z1") +
           md.mvnorm(c("Z2", "Z3"), c(100, 0), matrix(c(225, 3, 2, 1), 2, 2)) +
           md.sample("Z4", c(1, 2, 3, 4), c(0.25, 0.25, 0.25, 0.25)) +
-          md.dateuniform("birth", as.Date("1930-1-1"), as.Date("1930-1-1")) +
-          md.dateuniform("start", as.Date("1930-2-1"), as.Date("1930-2-1")) +
+          md.dateuniform("birth", as.Date("1930-1-1"), as.Date("1960-1-1")) +
+          md.value("start", as.Date("1990-1-1")) +
           md.death("death", ratetable, "sex", "birth", "start") +
           md.eval("age", "as.numeric(start - birth)/365.2425", 80, FALSE) + 
           md.exp("event", "start", c("age", "sex", "Z1", "Z2"), 

@@ -19,60 +19,6 @@ BEGIN_RCPP
 END_RCPP
 }
 
-//rcpp_Sample
-SEXP Sample(List params);
-RcppExport SEXP missDeaths_rcpp_Sample(SEXP pSEXP) {
-BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< List >::type params(pSEXP);
-
-        DataFrame __result = Sample(params);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
-END_RCPP
-}
-
-//rcpp_Resample
-SEXP Resample(Rcpp::DataFrame data);
-RcppExport SEXP missDeaths_rcpp_Resample(SEXP dSEXP) {
-BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< DataFrame >::type data(dSEXP);
-
-        DataFrame __result = Resample(data);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
-END_RCPP
-}
-
-//rcpp_BlindDeath
-SEXP BlindDeath(Rcpp::DataFrame data, bool zombies);//, double interval);
-RcppExport SEXP missDeaths_rcpp_BlindDeath(SEXP dSEXP, SEXP zSEXP/*, SEXP iSEXP*/) {
-BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< DataFrame >::type data(dSEXP);
-        Rcpp::traits::input_parameter< bool >::type zombies(zSEXP);
-        //Rcpp::traits::input_parameter< double >::type interval(iSEXP);
-
-        DataFrame __result = BlindDeath(data, zombies);//, interval);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
-END_RCPP
-}
-
-
 //rcpp_SimCensorX
 SEXP SimCensorX(Rcpp::DataFrame data1, Rcpp::NumericVector maxtime1, Rcpp::CharacterVector form1, Rcpp::DataFrame D1, int maxiter);
 RcppExport SEXP missDeaths_rcpp_SimCensorX(SEXP ddSEXP, SEXP mSEXP, SEXP fSEXP, SEXP dSEXP, SEXP iSEXP){
@@ -95,13 +41,13 @@ END_RCPP
 }
 
 //rcpp_SurvTime
-double SurvTime(int year, double age, double probability, int sex);
+double SurvTime(double year, double age, double probability, int sex);
 RcppExport SEXP missDeaths_rcpp_SurvTime(SEXP ySEXP, SEXP aSEXP, SEXP pSEXP, SEXP sSEXP) {
 BEGIN_RCPP
     SEXP __sexp_result;
     {
         Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< int >::type year(ySEXP );
+        Rcpp::traits::input_parameter< double >::type year(ySEXP );
         Rcpp::traits::input_parameter< double >::type age(aSEXP);
         Rcpp::traits::input_parameter< double >::type probability(pSEXP);
         Rcpp::traits::input_parameter< int >::type sex(sSEXP );

@@ -25,6 +25,6 @@ sim = md.simparams() +
 
 }
 \seealso{
-\code{\link{md.uniform}}, \code{\link{md.binom}}, \code{\link{md.norm}}, \code{\link{md.mvnorm}}, \code{\link{md.sex}}, \code{\link{md.dateuniform}}, \code{\link{md.exp}}, \code{\link{md.death}}
+\code{\link{md.value}}, \code{\link{md.uniform}}, \code{\link{md.binom}}, \code{\link{md.norm}}, \code{\link{md.mvnorm}}, \code{\link{md.sex}}, \code{\link{md.dateuniform}}, \code{\link{md.exp}}, \code{\link{md.death}}
 }
 

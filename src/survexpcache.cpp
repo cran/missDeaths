@@ -164,8 +164,6 @@ public:
   }
 };
 
-//SurvExp* SurvExpCache;
-
 // [[Rcpp::export]]
 void SurvExpInit(SEXP poptable)
 {
@@ -176,66 +174,21 @@ void SurvExpInit(SEXP poptable)
   SurvExpCache = new SurvExp(poptable);
 }
 
-// [[Rcpp::export]]
-SEXP SurvProbability(int birthyear, double age, int sex)
+double SurvTime(double birthyear, double age, double probability, int sex)
 {
   if (SurvExpCache != NULL)
   {
-    SurvCurve* curve = SurvExpCache->Get(birthyear, sex);
-    if (curve != NULL)
-      return Rcpp::wrap(curve->Probability(age));//-curve->Probability2(age));
-  }
-  return Rcpp::wrap(-1);
-}
-
-
-// [[Rcpp::export]]
-SEXP SurvTimeX(int birthyear, double probability, int sex)
-{
-  if (SurvExpCache != NULL)
-  {
-    SurvCurve* curve = SurvExpCache->Get(birthyear, sex);
-    if (curve != NULL)
-      return Rcpp::wrap(curve->Age(probability));
-  }
-  return Rcpp::wrap(-1);
-}
-
-double SurvTime(int birthyear, double age, double probability, int sex)
-{
-  if (SurvExpCache != NULL)
-  {
-    SurvCurve* curve = SurvExpCache->Get(birthyear, sex);
-    if (curve != NULL)
-      return curve->Time(age, probability);
+    int year = floor(birthyear);
+    SurvCurve* curve1 = SurvExpCache->Get(year, sex);
+    SurvCurve* curve2 = SurvExpCache->Get(year + 1, sex);
+    
+    if ((curve1 != NULL) && (curve2 != NULL))
+    {
+      double time1 = curve1->Time(age, probability);
+      double time2 = curve2->Time(age, probability);
+      
+      return time1 + (time2 - time1) * (birthyear - (double)year);
+    }
   }
   return -1;
-}
-
-// [[Rcpp::export]]
-SEXP ExpPrep(Rcpp::DataFrame data, Rcpp::NumericVector difft)
-{
-  Rcpp::NumericVector age((SEXP)data["age"]);
-  Rcpp::IntegerVector sex((SEXP)data["sex"]);
-  Rcpp::NumericVector year((SEXP)data["year"]);
-
-  Rcpp::NumericMatrix expprep(age.length(), difft.length());
-  if (SurvExpCache != NULL)
-    for (int i = 0; i < age.length(); i++)
-    {
-      SurvCurve* curve = SurvExpCache->Get(year[i], sex[i]);
-      if (curve != NULL)
-      {
-        double currentAge = age[i];
-        double p = curve->Probability(currentAge);
-        for (int j = 0; j < difft.length(); j++)
-        {
-          currentAge += difft[j];
-          double p1 = curve->Probability(currentAge);
-          expprep(i, j) = p1 / p;
-          p = p1;
-        }
-      }
-    }
-  return Rcpp::wrap(expprep);
 }

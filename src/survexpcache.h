@@ -1,4 +1,4 @@
-double SurvTime(int year, double age, double probability, int sex);
+double SurvTime(double year, double age, double probability, int sex);
 
 class SurvExp;
 static SurvExp* SurvExpCache;

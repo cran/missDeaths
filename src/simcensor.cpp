@@ -5,7 +5,6 @@
 using namespace Rcpp;
 using namespace std;
 
-// [[Rcpp::export]]
 SEXP SimCensor1(Rcpp::NumericVector time1, Rcpp::IntegerVector status1, Rcpp::DataFrame D1)
 {
   if (SurvExpCache != NULL)
@@ -36,7 +35,6 @@ SEXP SimCensor1(Rcpp::NumericVector time1, Rcpp::IntegerVector status1, Rcpp::Da
   throw std::range_error("Unknown SimCensor1() Error");
 }
 
-// [[Rcpp::export]]
 SEXP SimCensor2(Rcpp::NumericVector time1, Rcpp::IntegerVector status1, Rcpp::DataFrame D1)
 {
   if (SurvExpCache != NULL)
