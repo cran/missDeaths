@@ -7,55 +7,101 @@ using namespace Rcpp;
 
 //rcpp_SurvExpInit
 void SurvExpInit(SEXP poptable);
-RcppExport SEXP missDeaths_rcpp_SurvExpInit(SEXP popSEXP) {
-BEGIN_RCPP
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< SEXP >::type poptable(popSEXP);
-
-        SurvExpInit(poptable);
-    }
-    return R_NilValue;
-END_RCPP
+RcppExport SEXP missDeaths_rcpp_SurvExpInit_try(SEXP popSEXP) {
+  BEGIN_RCPP
+  Rcpp::RObject rcpp_result_gen;
+  Rcpp::traits::input_parameter< SEXP >::type poptable(popSEXP);
+  SurvExpInit(poptable);
+  return rcpp_result_gen;
+  END_RCPP_RETURN_ERROR
 }
-
+RcppExport SEXP missDeaths_rcpp_SurvExpInit(SEXP popSEXP) {
+  SEXP rcpp_result_gen;
+  {
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    rcpp_result_gen = PROTECT(missDeaths_rcpp_SurvExpInit_try(popSEXP));
+  }
+  Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
+  if (rcpp_isInterrupt_gen) {
+    UNPROTECT(1);
+    Rf_onintr();
+  }
+  Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
+  if (rcpp_isError_gen) {
+    SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
+    UNPROTECT(1);
+    Rf_error(CHAR(rcpp_msgSEXP_gen));
+  }
+  UNPROTECT(1);
+  return rcpp_result_gen;
+}
+  
 //rcpp_SimCensorX
 SEXP SimCensorX(Rcpp::DataFrame data1, Rcpp::NumericVector maxtime1, Rcpp::CharacterVector form1, Rcpp::DataFrame D1, int maxiter);
-RcppExport SEXP missDeaths_rcpp_SimCensorX(SEXP ddSEXP, SEXP mSEXP, SEXP fSEXP, SEXP dSEXP, SEXP iSEXP){
-BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< Rcpp::NumericVector >::type maxTime(mSEXP);
-        Rcpp::traits::input_parameter< Rcpp::DataFrame >::type D(dSEXP);
-        Rcpp::traits::input_parameter< Rcpp::DataFrame >::type data(ddSEXP);
-        Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type form(fSEXP);
-        Rcpp::traits::input_parameter< int >::type iter(iSEXP);
-
-        SEXP __result = SimCensorX(data, maxTime, form, D, iter);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
-END_RCPP
+RcppExport SEXP missDeaths_rcpp_SimCensorX_try(SEXP ddSEXP, SEXP mSEXP, SEXP fSEXP, SEXP dSEXP, SEXP iSEXP){
+  BEGIN_RCPP
+  Rcpp::RObject rcpp_result_gen;
+  Rcpp::traits::input_parameter< Rcpp::NumericVector >::type maxTime(mSEXP);
+  Rcpp::traits::input_parameter< Rcpp::DataFrame >::type D(dSEXP);
+  Rcpp::traits::input_parameter< Rcpp::DataFrame >::type data(ddSEXP);
+  Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type form(fSEXP);
+  Rcpp::traits::input_parameter< int >::type iter(iSEXP);
+  rcpp_result_gen = Rcpp::wrap(SimCensorX(data, maxTime, form, D, iter));
+  return rcpp_result_gen;
+  END_RCPP_RETURN_ERROR
 }
-
+RcppExport SEXP missDeaths_rcpp_SimCensorX(SEXP ddSEXP, SEXP mSEXP, SEXP fSEXP, SEXP dSEXP, SEXP iSEXP) {
+  SEXP rcpp_result_gen;
+  {
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    rcpp_result_gen = PROTECT(missDeaths_rcpp_SimCensorX_try(ddSEXP, mSEXP, fSEXP, dSEXP, iSEXP));
+  }
+  Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
+  if (rcpp_isInterrupt_gen) {
+    UNPROTECT(1);
+    Rf_onintr();
+  }
+  Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
+  if (rcpp_isError_gen) {
+    SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
+    UNPROTECT(1);
+    Rf_error(CHAR(rcpp_msgSEXP_gen));
+  }
+  UNPROTECT(1);
+  return rcpp_result_gen;
+}
+    
 //rcpp_SurvTime
 double SurvTime(double year, double age, double probability, int sex);
+RcppExport SEXP missDeaths_rcpp_SurvTime_try(SEXP ySEXP, SEXP aSEXP, SEXP pSEXP, SEXP sSEXP) {
+  BEGIN_RCPP
+  Rcpp::RObject rcpp_result_gen;
+  Rcpp::traits::input_parameter< double >::type year(ySEXP );
+  Rcpp::traits::input_parameter< double >::type age(aSEXP);
+  Rcpp::traits::input_parameter< double >::type probability(pSEXP);
+  Rcpp::traits::input_parameter< int >::type sex(sSEXP );
+  
+  rcpp_result_gen = Rcpp::wrap(SurvTime(year, age, probability, sex));
+  return rcpp_result_gen;
+  END_RCPP_RETURN_ERROR
+}
 RcppExport SEXP missDeaths_rcpp_SurvTime(SEXP ySEXP, SEXP aSEXP, SEXP pSEXP, SEXP sSEXP) {
-BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< double >::type year(ySEXP );
-        Rcpp::traits::input_parameter< double >::type age(aSEXP);
-        Rcpp::traits::input_parameter< double >::type probability(pSEXP);
-        Rcpp::traits::input_parameter< int >::type sex(sSEXP );
- 
-        double __result = SurvTime(year, age, probability, sex);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
+  SEXP rcpp_result_gen;
+  {
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    rcpp_result_gen = PROTECT(missDeaths_rcpp_SurvTime_try(ySEXP, aSEXP, pSEXP, sSEXP));
+  }
+  Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
+  if (rcpp_isInterrupt_gen) {
     UNPROTECT(1);
-    return __sexp_result;
-END_RCPP
+    Rf_onintr();
+  }
+  Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
+  if (rcpp_isError_gen) {
+    SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
+    UNPROTECT(1);
+    Rf_error(CHAR(rcpp_msgSEXP_gen));
+  }
+  UNPROTECT(1);
+  return rcpp_result_gen;
 }

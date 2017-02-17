@@ -1,0 +1,3 @@
+LIBRARY missDeaths.dll
+EXPORTS
+  R_init_missDeaths

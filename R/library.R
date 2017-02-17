@@ -215,7 +215,8 @@ setMethod("initialize", "md.death", function(.Object, x, y, z, q, w){
 })
 setMethod("md.generate", "md.death", function(.Object, .data, .param){ 
   data = runif(dim(.data)[1])
-  year = as.numeric(format(.data[,which(colnames(.data)== .Object@birthcolname)], "%Y"))
+  year = as.numeric(.data[,which(colnames(.data)== .Object@birthcolname)] - as.Date("0-1-1"))/365.2425
+  #year = as.numeric(format(.data[,which(colnames(.data)== .Object@birthcolname)], "%Y"))
   age = .data[,which(colnames(.data)== .Object@startcolname)] - .data[,which(colnames(.data)== .Object@birthcolname)]
   sex = .data[,which(colnames(.data)== .Object@sexcolname)]
   

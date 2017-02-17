@@ -1,7 +1,8 @@
-a86ca422041bba437fda36e4c8232725 *DESCRIPTION
+7514ccfcaa31c7dd5ce85a1c1fec1838 *DESCRIPTION
 ed77c81182fd31ee20ec059bb65b94b1 *NAMESPACE
-75a45564c549496a5637ee101af1cecb *R/RcppExports.R
-0c795ffa6eeaca6690645c241facc5c4 *R/library.R
+f9a985fe1e530d5ba4bd70db3b47894b *R/RcppExports.R
+ea145c6c630cc7d0201a51eb52ab801b *R/init.R
+ae1c7ac76794b542269ada8dc1f0cce8 *R/library.R
 4366e634f828b6d5ae1430d4be265f71 *R/mysurvnp.r
 73d1a5dbd7db3124f96092a77e5fe34e *R/package.R
 dea34ca45ff7cee50287cf79838d338c *data/observed.rdata
@@ -30,7 +31,10 @@ a014b33143c0956e284866e875212152 *man/md.uniform.Rd
 50fc8cf7db7579a3a7685f6c8e723434 *man/missDeaths.Rd
 a67026d7c6b102c273cd963ffb00290b *man/observed.Rd
 2fb0d1659d50aa95fcad0e31cd28be2e *man/plus-md.simdata-md.simdataobject-method.Rd
-7be1ec69ac7eff8da2663b1364dbf3a7 *src/RcppExports.cpp
+7e02af2c13f6bf1699340d47045d184a *src/Makevars
+032d3a18f3aa79ca7fc79e51ff598422 *src/RcppExports.cpp
+8d03f4c112667233225dee72d28488da *src/init.c
+ad32212eb462bb7dc917a5fb80358880 *src/missDeaths-win.def
 ee8436809735a875bbe89c822f23b54e *src/simcensor.cpp
 d0f39962e03004240248bb4c3be24189 *src/survexpcache.cpp
 2c73dc94347330234ad9f0b8c61fc066 *src/survexpcache.h

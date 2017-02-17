@@ -25,6 +25,7 @@ md.init <- function(poptable) {
 #  .Call('missDeaths_rcpp_BlindDeath', PACKAGE = 'missDeaths', data, zombies)
 #}
 #
+
 rcpp_SimCensorX <- function(data, maxTime, form, D, iterations) {
   .Call('missDeaths_rcpp_SimCensorX', PACKAGE = 'missDeaths', data, maxTime, form, D, iterations)
 }
@@ -68,7 +69,7 @@ md.D <- function(age, sex, year)
     age = age * 365.2425
   
   if (!is.numeric(year))
-    year = as.numeric(year - as.Date("1-1-1")) - 1960*365.2425
+    year = as.numeric(year - as.Date("0-1-1")) - 1960*365.2425
     
   D = data.frame(age=age, sex=sex, year=year)
   
@@ -77,7 +78,7 @@ md.D <- function(age, sex, year)
     if (!(sexlevels[i] %in% c("1", "2")))
       stop ("column 'sex' can only contain values 1 and 2")
   
-  if ((min(D$age) < 0) || (max(D$age) > 130 * 365))
+  if ((min(D$age) < 0) || (max(D$age) > 130 * 365.2425))
     stop ("values in column 'age' out of bounds, should be within [0, 130 * 365] days")
   
   return (D)
