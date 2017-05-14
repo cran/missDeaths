@@ -76,18 +76,22 @@ setMethod("initialize", "md.sample", function(.Object, x, y, z){
   if (!is.null(z))
     .Object@weights = z
 
-  if (class(y) == "Date")
+  if (is(y, "Date"))
   {
     .Object@dates = y
-    .Object@values = as.numeric(y)
+    .Object@values = Inf
+    .Object@center = sum(.Object@weights * as.numeric(.Object@dates)/sum(.Object@weights))
   }
   else
+  {
     .Object@values = y
-  .Object@center = sum(.Object@weights * .Object@values)/sum(.Object@weights)
+    .Object@center = sum(.Object@weights * .Object@values)/sum(.Object@weights)
+  }
+  
   .Object
 })
 setMethod("md.generate", "md.sample", function(.Object, .data, .param){ 
-  if (is.null(.Object@dates))
+  if (.Object@values[1] != Inf)
     data = data.frame(sample(.Object@values, dim(.data)[1], replace=TRUE, .Object@weights))
   else
     data = data.frame(sample(.Object@dates, dim(.data)[1], replace=TRUE, .Object@weights))
@@ -96,32 +100,39 @@ setMethod("md.generate", "md.sample", function(.Object, .data, .param){
 })
 setClass("md.uniform", representation(
   min = "numeric",
-  max = "numeric"
+  max = "numeric",
+  minDate = "Date",
+  maxDate = "Date"
 ), contains = "md.simdataobject")
 setMethod("initialize", "md.uniform", function(.Object, x, y, z){ 
   .Object = callNextMethod(.Object, x)
-  .Object@min = y
-  .Object@max = z
-  .Object@center = (.Object@min + .Object@max) / 2
+  
+  if (is(y, "Date"))
+  {
+    .Object@min = Inf
+    .Object@max = Inf
+    .Object@minDate = y
+    if (is(z, "numeric"))
+      .Object@maxDate = y + z
+    else
+      .Object@maxDate = z
+    .Object@center = as.numeric(.Object@minDate)+as.numeric(.Object@maxDate)/2
+  }
+  else
+  {
+    .Object@min = y
+    .Object@max = z
+    .Object@center = (.Object@min + .Object@max) / 2
+  }
+  
   .Object
 })
 setMethod("md.generate", "md.uniform", function(.Object, .data, .param){ 
-  data = data.frame(runif(dim(.data)[1], min=.Object@min, max=.Object@max))
-  names(data) = c(.Object@name)
-  data
-})
-setClass("md.dateuniform", representation(
-  min = "Date",
-  max = "Date"
-), contains = "md.simdataobject")
-setMethod("initialize", "md.dateuniform", function(.Object, x, y, z){ 
-  .Object = callNextMethod(.Object, x)
-  .Object@min = y
-  .Object@max = z
-  .Object
-})
-setMethod("md.generate", "md.dateuniform", function(.Object, .data, .param){ 
-  data = data.frame(as.Date(runif(dim(.data)[1], .Object@min, .Object@max), origin="1970-01-01"))
+  if (.Object@min == Inf)
+    data = data.frame(as.Date(runif(dim(.data)[1], .Object@minDate, .Object@maxDate), origin="1970-01-01"))
+  else
+    data = data.frame(runif(dim(.data)[1], min=.Object@min, max=.Object@max))
+  
   names(data) = c(.Object@name)
   data
 })
@@ -337,8 +348,8 @@ setMethod("+", c("md.simdata", "md.simdataobject"), function(e1, e2) {
 #'           md.uniform("Z1") +
 #'           md.mvnorm(c("Z2", "Z3"), c(100, 0), matrix(c(225, 3, 2, 1), 2, 2)) +
 #'           md.sample("Z4", c(1, 2, 3, 4), c(0.25, 0.25, 0.25, 0.25)) +
-#'           md.dateuniform("birth", as.Date("1930-1-1"), as.Date("1960-1-1")) +
-#'           md.value("start", as.Date("1990-1-1")) +
+#'           md.uniform("birth", as.Date("1930-1-1"), as.Date("1960-1-1")) +
+#'           md.constant("start", as.Date("1990-1-1")) +
 #'           md.death("death", ratetable, "sex", "birth", "start") +
 #'           md.eval("age", "as.numeric(start - birth)/365.2425", 80, FALSE) + 
 #'           md.exp("event", "start", c("age", "sex", "Z1", "Z2"), 
@@ -371,7 +382,7 @@ md.simulate = function(sim, N){
 #' The parameters specifying covariates and event time variables are appended to the md.simparams by 
 #' adding the appropriate function call
 #' 
-#' @seealso \code{\link{md.value}}, \code{\link{md.uniform}}, \code{\link{md.binom}}, \code{\link{md.norm}}, \code{\link{md.mvnorm}}, \code{\link{md.sex}}, \code{\link{md.dateuniform}}, \code{\link{md.exp}}, \code{\link{md.death}}
+#' @seealso \code{\link{md.constant}}, \code{\link{md.uniform}}, \code{\link{md.binom}}, \code{\link{md.norm}}, \code{\link{md.mvnorm}}, \code{\link{md.sex}}, \code{\link{md.exp}}, \code{\link{md.death}}
 #' @examples
 #' 
 #' \dontrun{
@@ -379,8 +390,8 @@ md.simulate = function(sim, N){
 #' 
 #' sim = md.simparams() +
 #'    md.sex("sex", 0.5) + 
-#'    md.dateuniform("birth", as.Date("1930-1-1"), as.Date("1960-1-1")) +
-#'    md.dateuniform("start", as.Date("2005-1-1"), as.Date("2010-1-1")) +
+#'    md.uniform("birth", as.Date("1930-1-1"), as.Date("1960-1-1")) +
+#'    md.uniform("start", as.Date("2005-1-1"), as.Date("2010-1-1")) +
 #'    md.death("death", survexp.us, "sex", "birth", "start") 
 #' }
 #' 
@@ -413,11 +424,11 @@ md.sex = function(name, maleperc = 0.5, asfactor = FALSE) { new("md.sex", name, 
 
 #' md.uniform
 #' 
-#' Creates information of a uniformly distributed numeric covariate with the specified lower and upper limits.
+#' Creates information of a uniformly distributed numeric or date covariate with the specified lower and upper limits.
 #' This function call must be added to the \code{\link{md.simparams}} object.
 #' 
 #' @param name name of the covariate
-#' @param min,max lower and upper limits of the distribution. Must be finite.
+#' @param min,max lower and upper limits of the distribution. Must be finite (either numeric or date)
 #' @usage md.uniform(name, min = 0, max = 1)
 #' @examples
 #' 
@@ -516,45 +527,25 @@ md.mvnorm = function(names, means = rep(0, length(names)), cov = diag(ncol(names
 md.sample = function(name, array, weights=NULL) { new("md.sample", name, array, weights) }
 
 
-#' md.value
+#' md.constant
 #' 
-#' Creates information of a covariate that contains a fixed value.
+#' Creates information of a covariate that contains a fixed value (either numeric or date).
 #' This function call must be added to the \code{\link{md.simparams}} object.
 #' 
 #' @param name name of the covariate
 #' @param value value of the covariate
-#' @usage md.value(name, value)
+#' @usage md.constant(name, value)
 #' @examples
 #' 
 #' \dontrun{
 #' library(missDeaths)
 #' 
 #' sim = md.simparams() +
-#'    md.value("start", as.Date("1990-1-1")) 
+#'    md.constant("start", as.Date("1990-1-1")) 
 #' }
-#' @export md.value
-md.value = function(name, value) { new("md.sample", name, value, NULL) }
+#' @export md.constant
+md.constant = function(name, value) { new("md.sample", name, value, NULL) }
 
-
-#' md.dateuniform
-#' 
-#' Creates information of a uniformly distributed date covariate with a specified lower and upper limits.
-#' This function call must be added to the \code{\link{md.simparams}} object. 
-#' 
-#' @param name name of the covariate
-#' @param start,end lower and upper limits of the date interval
-#' @usage md.dateuniform(name, start, end)
-#' @examples
-#' 
-#' \dontrun{
-#' library(missDeaths)
-#' 
-#' sim = md.simparams() +
-#'    md.dateuniform("birth", as.Date("1930-1-1"), as.Date("1960-1-1"))
-#' }
-#' 
-#' @export md.dateuniform
-md.dateuniform = function(name, start, end) { new("md.dateuniform", name, start, end) }
 
 
 #' md.death
@@ -575,8 +566,8 @@ md.dateuniform = function(name, start, end) { new("md.dateuniform", name, start,
 #' 
 #' sim = md.simparams() +
 #'    md.sex("sex", 0.5) + 
-#'      md.dateuniform("birth", as.Date("1930-1-1"), as.Date("1960-1-1")) +
-#'        md.dateuniform("start", as.Date("2005-1-1"), as.Date("2010-1-1")) +
+#'      md.uniform("birth", as.Date("1930-1-1"), as.Date("1960-1-1")) +
+#'        md.uniform("start", as.Date("2005-1-1"), as.Date("2010-1-1")) +
 #'          md.death("death", survexp.us, "sex", "birth", "start") 
 #' }
 #' @export md.death
@@ -589,7 +580,7 @@ md.death = function(name, poptable, sexcol, birthcol, startcol) { new("md.death"
 #' This function call must be added to the \code{\link{md.simparams}} object. 
 #' 
 #' @param data data.frame
-#' @param randomsample r
+#' @param randomsample controls whether the rows of the dataset are randomly sampled (with replaceent) or simply copied
 #' @usage md.data(data, randomsample = FALSE)
 #' @examples
 #' 
@@ -619,8 +610,8 @@ md.data = function(data, randomsample = FALSE) {new("md.data", data, randomsampl
 #' library(missDeaths)
 #' 
 #' sim = md.simparams() +
-#'     md.dateuniform("birth", as.Date("1915-1-1"), as.Date("1930-1-1")) +
-#'       md.dateuniform("start", as.Date("2000-1-1"), as.Date("2005-1-1")) +
+#'     md.uniform("birth", as.Date("1915-1-1"), as.Date("1930-1-1")) +
+#'       md.uniform("start", as.Date("2000-1-1"), as.Date("2005-1-1")) +
 #'           md.eval("age", "as.numeric(start - birth)/365.2425", 80, FALSE)
 #' }
 #' @export md.eval
@@ -671,8 +662,8 @@ md.exp = function(name, startcol, covariates, betas, lambda) { new("md.exp", nam
 #' 
 #' sim = md.simparams() +
 #'   md.sex("sex", 0.5) + 
-#'     md.dateuniform("birth", as.Date("1915-1-1"), as.Date("1930-1-1")) +
-#'       md.dateuniform("start", as.Date("2000-1-1"), as.Date("2005-1-1")) +
+#'     md.uniform("birth", as.Date("1915-1-1"), as.Date("1930-1-1")) +
+#'       md.uniform("start", as.Date("2000-1-1"), as.Date("2005-1-1")) +
 #'         md.death("death", survexp.us, "sex", "birth", "start") +
 #'           md.eval("age", "as.numeric(start - birth)/365.2425", 80, FALSE) + 
 #'             md.exp("event", "start", c("age", "sex"), c(0.1, 2), 0.05/365.2425)

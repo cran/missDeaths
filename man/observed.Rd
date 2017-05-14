@@ -9,4 +9,3 @@
 This data set is used to illustrate the missDeaths functions.
 }
 \keyword{datasets}
-

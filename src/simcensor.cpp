@@ -193,3 +193,25 @@ SEXP SimCensorX(Rcpp::DataFrame data1, Rcpp::NumericVector maxtime1, Rcpp::Chara
   //catch(...){}
   throw std::range_error("Unknown SimCensorX() Error");
 }
+
+// [[Rcpp::export]]
+SEXP SurvExpPrep(Rcpp::DataFrame D1, double time)
+{
+  if (SurvExpCache != NULL)
+    throw std::range_error("SurvExpCache is NULL");  
+  
+  try
+  {
+    Rcpp::DataFrame D = Rcpp::clone(D1);
+    Rcpp::NumericVector age = Rcpp::wrap(D["age"]);
+    Rcpp::NumericVector sex = Rcpp::wrap(D["sex"]);
+    Rcpp::NumericVector year = Rcpp::wrap(D["year"]);
+    
+    Rcpp::NumericVector recurrence = Rcpp::clone(age);
+    for (int i = 0; i < D.nrows(); i++)
+        recurrence[i] = SurvProbability(year[i]/365.25 + 1960, age[i], time, sex[i]);
+    return Rcpp::wrap(recurrence);
+  }
+  catch(...){}
+  throw std::range_error("Unknown SurvExpPrep() Error");
+}

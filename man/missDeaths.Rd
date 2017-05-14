@@ -34,8 +34,8 @@ sim = md.simparams() +
           md.binom("Z1", 0.5) +
           md.mvnorm(c("Z2", "Z3"), c(100, 0), matrix(c(225, 3, 2, 1), 2, 2)) +
           md.sample("Z4", c(1, 2, 3, 4), c(0.25, 0.25, 0.25, 0.25)) +
-          md.dateuniform("birth", as.Date("1925-1-1"), as.Date("1950-1-1")) +
-          md.dateuniform("start", as.Date("2000-1-1"), as.Date("2005-1-1")) +
+          md.uniform("birth", as.Date("1925-1-1"), as.Date("1950-1-1")) +
+          md.uniform("start", as.Date("2000-1-1"), as.Date("2005-1-1")) +
           md.death("death", ratetable, "sex", "birth", "start") +
           md.eval("age", "as.numeric(start - birth)/365.2425", 80, FALSE) + 
           md.exp("event", "start", c("age", "sex", "Z1", "Z2"), 
@@ -63,12 +63,11 @@ plot(np$time/365.2425, np$surv.net)
 plot(np$time/365.2425, np$surv.efs)
 }
 }
-\author{
-Tomaz Stupnik <tomaz.stupnik@gmail.com> and Maja Pohar Perme
-}
 \references{
 Stupnik T., Pohar Perme M. (2015) "Analysing disease recurrence
 with missing at risk information." Statistics in Medicine 35. p1130-43.
 \url{http://onlinelibrary.wiley.com/doi/10.1002/sim.6766/abstract}
 }
-
+\author{
+Tomaz Stupnik <tomaz.stupnik@gmail.com> and Maja Pohar Perme
+}

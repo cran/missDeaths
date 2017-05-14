@@ -3,6 +3,7 @@
 #include <time.h>
 #include "survexpcache.h"
 
+using namespace Rcpp;
 using namespace std;
 
 class SurvCurve
@@ -174,6 +175,7 @@ void SurvExpInit(SEXP poptable)
   SurvExpCache = new SurvExp(poptable);
 }
 
+// [[Rcpp::export]]
 double SurvTime(double birthyear, double age, double probability, int sex)
 {
   if (SurvExpCache != NULL)
@@ -191,4 +193,24 @@ double SurvTime(double birthyear, double age, double probability, int sex)
     }
   }
   return -1;
+}
+
+// [[Rcpp::export]]
+double SurvProbability(double birthyear, double age, double time, int sex)
+{
+  if (SurvExpCache != NULL)
+  {
+    int year = floor(birthyear);
+    SurvCurve* curve1 = SurvExpCache->Get(year, sex);
+    //SurvCurve* curve2 = SurvExpCache->Get(year + 1, sex);
+    
+    if ((curve1 != NULL)/* && (curve2 != NULL)*/)
+    {
+      double prob1 = curve1->Probability(age + time) / curve1->Probability(age);
+      //double prob2 = curve2->Probability(age + time) / curve2->Probability(age);
+      
+      return prob1;// + (prob2 - prob1) * (birthyear - (double)year);
+    }
+  }
+  return 1; 
 }

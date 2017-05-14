@@ -9,7 +9,7 @@ md.data(data, randomsample = FALSE)
 \arguments{
 \item{data}{data.frame}
 
-\item{randomsample}{r}
+\item{randomsample}{controls whether the rows of the dataset are randomly sampled (with replaceent) or simply copied}
 }
 \description{
 Creates information of covariates that are copies of covariates from an existing data set.
@@ -24,4 +24,3 @@ sim = md.simparams() +
    md.data(data) 
 }
 }
-

@@ -1,11 +1,6 @@
 #' @useDynLib missDeaths
 #' @importFrom Rcpp evalCpp
 
-#export(rcpp_SurvExpInit)
-#export(rcpp_SurvTime)
-#export(rcpp_SimCensorX)
-#export(md.fixsample)
-
 #' @importFrom mitools MIcombine
 #' @importFrom stats qchisq runif rbinom rnorm rexp
 #' @importFrom MASS mvrnorm
@@ -44,8 +39,8 @@ NULL
 #'           md.binom("Z1", 0.5) +
 #'           md.mvnorm(c("Z2", "Z3"), c(100, 0), matrix(c(225, 3, 2, 1), 2, 2)) +
 #'           md.sample("Z4", c(1, 2, 3, 4), c(0.25, 0.25, 0.25, 0.25)) +
-#'           md.dateuniform("birth", as.Date("1925-1-1"), as.Date("1950-1-1")) +
-#'           md.dateuniform("start", as.Date("2000-1-1"), as.Date("2005-1-1")) +
+#'           md.uniform("birth", as.Date("1925-1-1"), as.Date("1950-1-1")) +
+#'           md.uniform("start", as.Date("2000-1-1"), as.Date("2005-1-1")) +
 #'           md.death("death", ratetable, "sex", "birth", "start") +
 #'           md.eval("age", "as.numeric(start - birth)/365.2425", 80, FALSE) + 
 #'           md.exp("event", "start", c("age", "sex", "Z1", "Z2"), 

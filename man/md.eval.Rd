@@ -25,9 +25,8 @@ This function call must be added to the \code{\link{md.simparams}} object.
 library(missDeaths)
 
 sim = md.simparams() +
-    md.dateuniform("birth", as.Date("1915-1-1"), as.Date("1930-1-1")) +
-      md.dateuniform("start", as.Date("2000-1-1"), as.Date("2005-1-1")) +
+    md.uniform("birth", as.Date("1915-1-1"), as.Date("1930-1-1")) +
+      md.uniform("start", as.Date("2000-1-1"), as.Date("2005-1-1")) +
           md.eval("age", "as.numeric(start - birth)/365.2425", 80, FALSE)
 }
 }
-

@@ -9,10 +9,10 @@ md.uniform(name, min = 0, max = 1)
 \arguments{
 \item{name}{name of the covariate}
 
-\item{min, max}{lower and upper limits of the distribution. Must be finite.}
+\item{min, max}{lower and upper limits of the distribution. Must be finite (either numeric or date)}
 }
 \description{
-Creates information of a uniformly distributed numeric covariate with the specified lower and upper limits.
+Creates information of a uniformly distributed numeric or date covariate with the specified lower and upper limits.
 This function call must be added to the \code{\link{md.simparams}} object.
 }
 \examples{
@@ -25,4 +25,3 @@ sim = md.simparams() +
 }
 
 }
-

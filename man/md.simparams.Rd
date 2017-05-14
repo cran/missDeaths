@@ -18,13 +18,12 @@ library(missDeaths)
 
 sim = md.simparams() +
    md.sex("sex", 0.5) + 
-   md.dateuniform("birth", as.Date("1930-1-1"), as.Date("1960-1-1")) +
-   md.dateuniform("start", as.Date("2005-1-1"), as.Date("2010-1-1")) +
+   md.uniform("birth", as.Date("1930-1-1"), as.Date("1960-1-1")) +
+   md.uniform("start", as.Date("2005-1-1"), as.Date("2010-1-1")) +
    md.death("death", survexp.us, "sex", "birth", "start") 
 }
 
 }
 \seealso{
-\code{\link{md.value}}, \code{\link{md.uniform}}, \code{\link{md.binom}}, \code{\link{md.norm}}, \code{\link{md.mvnorm}}, \code{\link{md.sex}}, \code{\link{md.dateuniform}}, \code{\link{md.exp}}, \code{\link{md.death}}
+\code{\link{md.constant}}, \code{\link{md.uniform}}, \code{\link{md.binom}}, \code{\link{md.norm}}, \code{\link{md.mvnorm}}, \code{\link{md.sex}}, \code{\link{md.exp}}, \code{\link{md.death}}
 }
-

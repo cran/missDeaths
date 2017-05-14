@@ -31,8 +31,8 @@ library(missDeaths)
 
 sim = md.simparams() +
   md.sex("sex", 0.5) + 
-    md.dateuniform("birth", as.Date("1915-1-1"), as.Date("1930-1-1")) +
-      md.dateuniform("start", as.Date("2000-1-1"), as.Date("2005-1-1")) +
+    md.uniform("birth", as.Date("1915-1-1"), as.Date("1930-1-1")) +
+      md.uniform("start", as.Date("2000-1-1"), as.Date("2005-1-1")) +
         md.death("death", survexp.us, "sex", "birth", "start") +
           md.eval("age", "as.numeric(start - birth)/365.2425", 80, FALSE) + 
             md.exp("event", "start", c("age", "sex"), c(0.1, 2), 0.05/365.2425)
@@ -42,4 +42,3 @@ complete = md.censor(data, "start", as.Date("2010-1-1"), c("event", "death"))
 }
 
 }
-

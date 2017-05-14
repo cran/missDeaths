@@ -28,9 +28,8 @@ library(missDeaths)
 
 sim = md.simparams() +
    md.sex("sex", 0.5) + 
-     md.dateuniform("birth", as.Date("1930-1-1"), as.Date("1960-1-1")) +
-       md.dateuniform("start", as.Date("2005-1-1"), as.Date("2010-1-1")) +
+     md.uniform("birth", as.Date("1930-1-1"), as.Date("1960-1-1")) +
+       md.uniform("start", as.Date("2005-1-1"), as.Date("2010-1-1")) +
          md.death("death", survexp.us, "sex", "birth", "start") 
 }
 }
-

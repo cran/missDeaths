@@ -26,4 +26,3 @@ sim = md.simparams() +
    md.sample("X", c(0, 1, 2), c(0.2, 0.3, 0.5)) 
 }
 }
-

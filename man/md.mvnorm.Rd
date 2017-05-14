@@ -26,4 +26,3 @@ sim = md.simparams() +
    md.mvnorm(c("X1", "X2"), c(100, 0), matrix(c(225, 3, 2, 1), 2, 2))
 }
 }
-
