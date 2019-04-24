@@ -1,4 +1,4 @@
-48f615c935e763c513aa272b14c6cdcf *DESCRIPTION
+190cd2af197ee5c471e752a60af738a7 *DESCRIPTION
 ac72c4fee92a98cda081763ae3758d8f *NAMESPACE
 62767c0e1cca4beb4eac67050d75d2dd *R/RcppExports.R
 7751be163660232645f94bd5e14c475f *R/exports.R
@@ -33,7 +33,7 @@ f0ce0b997af08e1c7a1a79c4b2072c17 *man/md.uniform.Rd
 86f98efa083140b0f33c3c1217fef4dd *man/missDeaths.Rd
 a7b321c2f749a32aa97e598ea284b0a0 *man/observed.Rd
 d0b35365258e7b6ac81ea0c5fb17fdcb *man/plus-md.simdata-md.simdataobject-method.Rd
-7e02af2c13f6bf1699340d47045d184a *src/Makevars
+5f5a346c6b52222ce5b25762ae77b628 *src/Makevars
 d503c354773649b08afa64020f0f5c2d *src/RcppExports.cpp
 4945a0997c98bbb1ecce62425aead8e7 *src/init.c
 ad32212eb462bb7dc917a5fb80358880 *src/missDeaths-win.def
