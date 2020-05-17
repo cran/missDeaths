@@ -1,4 +1,4 @@
-190cd2af197ee5c471e752a60af738a7 *DESCRIPTION
+a0daa0d3dcdcddac1cc1eaa4aebd2f2c *DESCRIPTION
 ac72c4fee92a98cda081763ae3758d8f *NAMESPACE
 62767c0e1cca4beb4eac67050d75d2dd *R/RcppExports.R
 7751be163660232645f94bd5e14c475f *R/exports.R
@@ -22,7 +22,7 @@ b6f5ab198f4af354cee5c74acd0b6415 *man/md.mvnorm.Rd
 9c16c262c25b45b5dc21866a4b2e08c7 *man/md.norm.Rd
 a25b0130e2c340fc64a6c3dd578f4628 *man/md.sample.Rd
 aac054a16cac35c9071328cbe9d839c7 *man/md.sex.Rd
-d8df676956ae372ddace2e642147a7da *man/md.simdataobject.Rd
+dfea63152b88e3f3651719e6e4836819 *man/md.simdataobject.Rd
 cc835a6e4adc9ef558a378dfada0fbcc *man/md.simparams.Rd
 c2145cf52d44c03781b839759a2f15d4 *man/md.simulate.Rd
 554b6162df318e40609c84acf7f58242 *man/md.survcox.Rd
@@ -32,11 +32,11 @@ d853637b73d2bac8d9c1467da39484e9 *man/md.survtime.Rd
 f0ce0b997af08e1c7a1a79c4b2072c17 *man/md.uniform.Rd
 86f98efa083140b0f33c3c1217fef4dd *man/missDeaths.Rd
 a7b321c2f749a32aa97e598ea284b0a0 *man/observed.Rd
-d0b35365258e7b6ac81ea0c5fb17fdcb *man/plus-md.simdata-md.simdataobject-method.Rd
-5f5a346c6b52222ce5b25762ae77b628 *src/Makevars
+f6d1274e4cb0048e54e5e48d952de740 *man/plus-md.simdata-md.simdataobject-method.Rd
+125ac7aa8fa4ae9aafab9e3c705913bd *src/Makevars
 d503c354773649b08afa64020f0f5c2d *src/RcppExports.cpp
 4945a0997c98bbb1ecce62425aead8e7 *src/init.c
 ad32212eb462bb7dc917a5fb80358880 *src/missDeaths-win.def
-b0f9664e574942743eb09d21936fdb3c *src/simcensor.cpp
+dde3395af7854874ef3a644c1599c2b4 *src/simcensor.cpp
 9fc54d0203ef154e719b8bc174879062 *src/survexpcache.cpp
 6fe25273de294284441d4add12c650d7 *src/survexpcache.h

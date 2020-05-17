@@ -86,12 +86,12 @@ SEXP SimCensorX(Rcpp::DataFrame data1, Rcpp::NumericVector maxtime1, Rcpp::Chara
     std::string colTime, colStatus;
     std::string text = Rcpp::as<std::string>(form1[0]);
     std::transform(text.begin(), text.end(), text.begin(), ::tolower);
-    unsigned int start = text.find("surv(");
-    unsigned int end = text.find(")~");
+    size_t start = text.find("surv(");
+    size_t end = text.find(")~");
     if ((start != string::npos) && (end != string::npos))
     {
       std::string str = text.substr(start + 5, end - start - 5);
-      unsigned int comma = str.find(',');
+      size_t comma = str.find(',');
       if (comma != string::npos)
       {
         colTime = str.substr(0, comma);

@@ -4,9 +4,6 @@
 \name{+,md.simdata,md.simdataobject-method}
 \alias{+,md.simdata,md.simdataobject-method}
 \title{operator}
-\usage{
-x
-}
 \description{
 operator
 }

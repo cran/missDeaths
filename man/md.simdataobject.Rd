@@ -6,9 +6,6 @@
 \alias{md.simdataobject-init}
 \title{md.simdataobject is an abstract class that is inherited by the 
 md.simdata covariate generating classes such as md.binom, md.norm etc.}
-\usage{
-aaa
-}
 \description{
 md.simdataobject is an abstract class that is inherited by the 
 md.simdata covariate generating classes such as md.binom, md.norm etc.
