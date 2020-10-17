@@ -115,7 +115,8 @@ private:
       Rcpp::NumericVector ptage = Rcpp::NumericVector(1, 0.0);
       Rcpp::IntegerVector ptsex = Rcpp::IntegerVector(1, 1);
       ptsex[0] = sex;
-      Rcpp::NumericVector ptyear = Rcpp::NumericVector(1, (survyear - 1960) * 365.2425);
+      
+      Rcpp::NumericVector ptyear = Rcpp::NumericVector(1, (survyear - 1970) * 365.2425);
       Rcpp::DataFrame data = Rcpp::DataFrame::create(Rcpp::Named("age") = ptage, Rcpp::Named("sex") = ptsex, Rcpp::Named("year") = ptyear);
   
       Rcpp::Environment stats("package:survival");
@@ -213,4 +214,22 @@ double SurvProbability(double birthyear, double age, double time, int sex)
     }
   }
   return 1; 
+}
+
+// [[Rcpp::export]]
+SEXP SurvDump(int year, int sex)
+{
+  if (SurvExpCache == NULL)
+    throw std::range_error("SurvExpCache is NULL");
+  
+  SurvCurve* c = SurvExpCache->Get(year, sex);
+  Rcpp::NumericVector times = Rcpp::clone(c->Times);
+  Rcpp::NumericVector curve = Rcpp::clone(c->Curve);
+    
+  
+  double date = Rcpp::Date(year, 1, 1) - Rcpp::Date(0);
+  Rcpp::NumericVector d = Rcpp::NumericVector(1, date);
+  
+  Rcpp::List l = Rcpp::List::create(Rcpp::Named("year") = d, Rcpp::Named("times") = times, Rcpp::Named("surv") = curve);
+  return Rcpp::wrap(l);
 }

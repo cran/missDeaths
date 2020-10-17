@@ -86,12 +86,12 @@ SEXP SimCensorX(Rcpp::DataFrame data1, Rcpp::NumericVector maxtime1, Rcpp::Chara
     std::string colTime, colStatus;
     std::string text = Rcpp::as<std::string>(form1[0]);
     std::transform(text.begin(), text.end(), text.begin(), ::tolower);
-    size_t start = text.find("surv(");
-    size_t end = text.find(")~");
+    std::string::size_type start = text.find("surv(");
+    std::string::size_type end = text.find(")~");
     if ((start != string::npos) && (end != string::npos))
     {
       std::string str = text.substr(start + 5, end - start - 5);
-      size_t comma = str.find(',');
+      std::string::size_type comma = str.find(',');
       if (comma != string::npos)
       {
         colTime = str.substr(0, comma);
@@ -207,9 +207,11 @@ SEXP SurvExpPrep(Rcpp::DataFrame D1, double time)
     Rcpp::NumericVector sex = Rcpp::wrap(D["sex"]);
     Rcpp::NumericVector year = Rcpp::wrap(D["year"]);
     
+    Rcpp::Date origin(0);//1970-1-1
+    
     Rcpp::NumericVector recurrence = Rcpp::clone(age);
     for (int i = 0; i < D.nrows(); i++)
-        recurrence[i] = SurvProbability(year[i]/365.25 + 1960, age[i], time, sex[i]);
+        recurrence[i] = SurvProbability(year[i]/365.25 + origin.getYear(), age[i], time, sex[i]);
     return Rcpp::wrap(recurrence);
   }
   catch(...){}

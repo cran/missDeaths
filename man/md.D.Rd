@@ -12,7 +12,7 @@ md.D(age, sex, year)
 \item{sex}{vector containing 1 for males and 2 for females}
 
 \item{year}{vector of years of entry into the study can either be supplied 
-as vector of start dates or as vector of years specified in number of days from 1-1-1960.}
+as vector of start dates or as vector of years specified in number of days from origin (1-1-1970).}
 }
 \description{
 Utility function that returns a data.frame containing basic demographic

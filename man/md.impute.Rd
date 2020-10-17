@@ -47,7 +47,7 @@ data(slopop)
 
 data(observed)
 observed$time = observed$time*365.2425
-D = md.D(age=observed$age*365.2425, sex=observed$sex, year=(observed$year - 1960)*365.2425)
+D = md.D(age=observed$age*365.2425, sex=observed$sex, year=(observed$year - 1970)*365.2425)
 newtimes = md.impute(observed, Surv(time, status) ~ age + sex + iq + elevation, 
   observed$maxtime*365.2425, D, slopop, iterations=4)
 
@@ -72,7 +72,7 @@ plot(surv.efs)
 \references{
 Stupnik T., Pohar Perme M. (2015) "Analysing disease recurrence
 with missing at risk information." Statistics in Medicine 35. p1130-43.
-\url{http://onlinelibrary.wiley.com/doi/10.1002/sim.6766/abstract}
+\url{https://onlinelibrary.wiley.com/doi/abs/10.1002/sim.6766}
 }
 \seealso{
 \code{\link{md.survcox}}

@@ -66,7 +66,7 @@ plot(np$time/365.2425, np$surv.efs)
 \references{
 Stupnik T., Pohar Perme M. (2015) "Analysing disease recurrence
 with missing at risk information." Statistics in Medicine 35. p1130-43.
-\url{http://onlinelibrary.wiley.com/doi/10.1002/sim.6766/abstract}
+\url{https://onlinelibrary.wiley.com/doi/abs/10.1002/sim.6766}
 }
 \author{
 Tomaz Stupnik <tomaz.stupnik@gmail.com> and Maja Pohar Perme

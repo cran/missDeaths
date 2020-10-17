@@ -56,6 +56,19 @@ md.survprob <- function(year, age, time, sex) {
 }
 
 
+#' Initializes the missDeaths population table cache
+#' 
+#' @keywords internal 
+#' 
+#' 
+#' @param year year
+#' @param sex sex
+#' @export md.survdump
+#md.survdump <- function(year, sex) {
+#  SurvDump(year, sex)
+#}
+
+
 
 #' Prepare compatible demographic information
 #' 
@@ -67,7 +80,7 @@ md.survprob <- function(year, age, time, sex) {
 #' @param age vector of patient ages specified as number of days or number of years.
 #' @param sex vector containing 1 for males and 2 for females
 #' @param year vector of years of entry into the study can either be supplied 
-#' as vector of start dates or as vector of years specified in number of days from 1-1-1960.
+#' as vector of start dates or as vector of years specified in number of days from origin (1-1-1970).
 #' @seealso \code{\link{md.survcox}}, \code{\link{md.survnp}}
 #' @export md.D
 md.D <- function(age, sex, year)
@@ -76,7 +89,7 @@ md.D <- function(age, sex, year)
     age = age * 365.2425
   
   if (!is.numeric(year))
-    year = as.numeric(year - as.Date("0-1-1")) - 1960*365.2425
+    year = as.numeric(year - as.Date("0-1-1")) - 1970*365.2425
     
   D = data.frame(age=age, sex=sex, year=year)
   
@@ -94,7 +107,7 @@ md.D <- function(age, sex, year)
 md.fixsample <- function(observed)
 {
   md = observed
-  md$year = (md$year + md$age - 1960) * 365.2425
+  md$year = (md$year + md$age - 1970) * 365.2425
   md$age = md$age * 365.2425
   md$time = round(md$time * 365.2425)
   md$maxtime = round(md$maxtime * 365.2425)
@@ -134,7 +147,7 @@ md.fixsample <- function(observed)
 #' @seealso \code{\link{md.survcox}}
 #' @references Stupnik T., Pohar Perme M. (2015) "Analysing disease recurrence
 #' with missing at risk information." Statistics in Medicine 35. p1130-43.
-#' \url{http://onlinelibrary.wiley.com/doi/10.1002/sim.6766/abstract}
+#' \url{https://onlinelibrary.wiley.com/doi/abs/10.1002/sim.6766}
 
 #' @examples
 #' library(missDeaths)
@@ -142,7 +155,7 @@ md.fixsample <- function(observed)
 #' 
 #' data(observed)
 #' observed$time = observed$time*365.2425
-#' D = md.D(age=observed$age*365.2425, sex=observed$sex, year=(observed$year - 1960)*365.2425)
+#' D = md.D(age=observed$age*365.2425, sex=observed$sex, year=(observed$year - 1970)*365.2425)
 #' newtimes = md.impute(observed, Surv(time, status) ~ age + sex + iq + elevation, 
 #'   observed$maxtime*365.2425, D, slopop, iterations=4)
 #' 
@@ -169,7 +182,7 @@ md.impute <- function(data, f, maxtime, D, ratetable, iterations=4)
   #require(survival)
   #require(rms)
   
-  D$year = 1960 + round((D$year - D$age) / 365.2425)
+  D$year = 1970 + round((D$year - D$age) / 365.2425)
   f = deparse(f)
   f = gsub(" ", "", f, fixed = TRUE)
 
@@ -215,7 +228,7 @@ md.impute <- function(data, f, maxtime, D, ratetable, iterations=4)
 #' Event free survival estimates}
 #' @references Stupnik T., Pohar Perme M. (2015) "Analysing disease recurrence
 #' with missing at risk information." Statistics in Medicine 35. p1130-43.
-#' \url{http://onlinelibrary.wiley.com/doi/10.1002/sim.6766/abstract}
+#' \url{https://onlinelibrary.wiley.com/doi/abs/10.1002/sim.6766}
 #' @examples
 #' 
 #' \dontrun{
@@ -224,7 +237,7 @@ md.impute <- function(data, f, maxtime, D, ratetable, iterations=4)
 #' data(slopop)
 #' 
 #' data(observed)
-#' D = md.D(age=observed$age*365.2425, sex=observed$sex, year=(observed$year - 1960)*365.2425)
+#' D = md.D(age=observed$age*365.2425, sex=observed$sex, year=(observed$year - 1970)*365.2425)
 #' np = md.survnp(observed$time*365.2425, observed$status, observed$maxtime*365.2425, D, slopop)
 #' 
 #' #calculate net survival at 3 and 9 years
@@ -279,7 +292,7 @@ md.survnp <- function(time, status, maxtime, D, ratetable, conf.int=0.95)
 #' @seealso \code{\link{md.impute}}, \code{\link[mitools]{MIcombine}}
 #' @references Stupnik T., Pohar Perme M. (2015) "Analysing disease recurrence
 #' with missing at risk information." Statistics in Medicine 35. p1130-43.
-#' \url{http://onlinelibrary.wiley.com/doi/10.1002/sim.6766/abstract}
+#' \url{https://onlinelibrary.wiley.com/doi/abs/10.1002/sim.6766}
 #' @examples
 #' 
 #' \dontrun{
@@ -288,7 +301,7 @@ md.survnp <- function(time, status, maxtime, D, ratetable, conf.int=0.95)
 #' 
 #' data(observed)
 #' observed$time = observed$time*365.2425
-#' D = md.D(age=observed$age*365.2425, sex=observed$sex, year=(observed$year - 1960)*365.2425)
+#' D = md.D(age=observed$age*365.2425, sex=observed$sex, year=(observed$year - 1970)*365.2425)
 #' 
 #' #fit a cox model (NOTE: estimated std error is slightly underestimated!)
 #' md.survcox(observed, Surv(time, status) ~ age + sex + iq + elevation, 
@@ -302,7 +315,7 @@ md.survnp <- function(time, status, maxtime, D, ratetable, conf.int=0.95)
 #' @export md.survcox
 md.survcox <- function(data, f, maxtime, D, ratetable, iterations=4, R = 50)
 {  
-  D$year = 1960 + round((D$year - D$age) / 365.2425)
+  D$year = 1970 + round((D$year - D$age) / 365.2425)
   ff = deparse(f)
   ff = gsub(" ", "", ff, fixed = TRUE)
     

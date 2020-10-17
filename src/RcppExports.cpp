@@ -70,3 +70,15 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// SurvDump
+SEXP SurvDump(int year, int sex);
+RcppExport SEXP missDeaths_SurvDump(SEXP yearSEXP, SEXP sexSEXP) {
+    BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type year(yearSEXP);
+    Rcpp::traits::input_parameter< int >::type sex(sexSEXP);
+    rcpp_result_gen = Rcpp::wrap(SurvDump(year, sex));
+    return rcpp_result_gen;
+    END_RCPP
+}

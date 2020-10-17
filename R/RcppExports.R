@@ -21,3 +21,7 @@ SurvProbability <- function(birthyear, age, time, sex) {
     .Call('missDeaths_SurvProbability', PACKAGE = 'missDeaths', birthyear, age, time, sex)
 }
 
+SurvDump <- function(year, sex) {
+    .Call('missDeaths_SurvDump', PACKAGE = 'missDeaths', year, sex)
+}
+
