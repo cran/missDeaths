@@ -1,7 +1,7 @@
 .onAttach <- function(...) {
   welcome <- paste("",
                    "----------------------------",
-                   " Welcome to missDeaths v2.7",
+                   " Welcome to missDeaths v2.8",
                    "----------------------------",
                    sep = "\n")
   packageStartupMessage(welcome)

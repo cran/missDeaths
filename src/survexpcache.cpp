@@ -37,6 +37,11 @@ public:
   {
     if (time < 0) time= 0;
     int i = Find(time, 0, Times.length()-1);
+
+    // if time is out of the cached survival curve
+    // return the last survival probability
+    if (i == Times.length() - 1)
+      return Curve[i];
     
     if (time == Times[i])
       return Curve[i];
@@ -47,23 +52,6 @@ public:
     double s2 = Curve[i];
           
     return s1 - (time - t1) / (t2 - t1) * (s1 - s2);
-  }
-  double Probability2(double time)
-  {
-    if (time < 0) time= 0;
-    for (int i = 0; i < Times.size(); i++)
-    {
-      if (Times[i] > time)
-      {
-          double t1 = (i == 0) ? 0 : Times[i - 1];
-          double t2 = Times[i];
-          double s1 = (i == 0) ? 1 : Curve[i - 1];
-          double s2 = Curve[i];
-          
-          return s1 - (time - t1) / (t2 - t1) * (s1 - s2);
-      }
-    }
-    return -1;  
   }
   double Age(double prob)
   {
@@ -80,7 +68,12 @@ public:
           
           return (t1 + (p1 - prob) * (t2 - t1) / (p1 - p2));
       }
-    return -1;
+
+    // when probability is out of the cached survival curve
+    // return the last time on the cached curve
+    return Times[Curve.size() - 1];
+
+    // return -1;
   }
   double Time(double age, double prob)
   {
@@ -202,16 +195,10 @@ double SurvProbability(double birthyear, double age, double time, int sex)
   if (SurvExpCache != NULL)
   {
     int year = floor(birthyear);
-    SurvCurve* curve1 = SurvExpCache->Get(year, sex);
-    //SurvCurve* curve2 = SurvExpCache->Get(year + 1, sex);
-    
-    if ((curve1 != NULL)/* && (curve2 != NULL)*/)
-    {
-      double prob1 = curve1->Probability(age + time) / curve1->Probability(age);
-      //double prob2 = curve2->Probability(age + time) / curve2->Probability(age);
-      
-      return prob1;// + (prob2 - prob1) * (birthyear - (double)year);
-    }
+
+    SurvCurve* curve = SurvExpCache->Get(year, sex);
+    if (curve != NULL)
+      return  curve->Probability(age + time) / curve->Probability(age);
   }
   return 1; 
 }
@@ -226,7 +213,6 @@ SEXP SurvDump(int year, int sex)
   Rcpp::NumericVector times = Rcpp::clone(c->Times);
   Rcpp::NumericVector curve = Rcpp::clone(c->Curve);
     
-  
   double date = Rcpp::Date(year, 1, 1) - Rcpp::Date(0);
   Rcpp::NumericVector d = Rcpp::NumericVector(1, date);
   

@@ -1,14 +1,14 @@
-0dff19d023c2d41d3e55cd4cde43882b *DESCRIPTION
-ac72c4fee92a98cda081763ae3758d8f *NAMESPACE
+5f376018b2bc4541959278b03bf2e622 *DESCRIPTION
+f7858f79f48d8adacdab3095a2023241 *NAMESPACE
 7c6e09299eabfd40c5a721ff8884266f *R/RcppExports.R
-7692f219414db0c8a21a179f830d5c9b *R/exports.R
-d9f96fb177bc19fd9982743813427edc *R/init.R
+9b569d0e1525cc998f114afc66451be4 *R/exports.R
+937f5ae5bf3c92cb2e43bad4f5deeddc *R/init.R
 c2d8da2a4ac847801eae97475cc11605 *R/library.R
 f60ecae6a65217a7c71e53c72e4907ed *R/mysurvnp.r
 065b3409efae3d6c0f8a84cbe3b731e5 *R/package.R
 dea34ca45ff7cee50287cf79838d338c *data/observed.rdata
 7adaa8e7d6bbc49a3140f081da366fc8 *man/md.D.Rd
-938bb5447b4e2f3c614d954e07cc46ad *man/md.binom.Rd
+a59e852b6ecc583e437c0eb893604d9e *man/md.binom.Rd
 5880699b30684096ef7c5d0ea660cdc8 *man/md.censor.Rd
 44f9a98e3e8980e93eb6b4034496ce0b *man/md.constant.Rd
 52101c3eaeed720f5bf36010aa3e8095 *man/md.data.Rd
@@ -26,6 +26,7 @@ dfea63152b88e3f3651719e6e4836819 *man/md.simdataobject.Rd
 85d2948905be0fd726394db41d5ebb97 *man/md.simparams.Rd
 fa6aa8183390883a7064df8f8c9ffcef *man/md.simulate.Rd
 7f841856942148a4f853963420697cf2 *man/md.survcox.Rd
+61c1b36a102424bf9dfbc80aafbf2ba7 *man/md.survdump.Rd
 bfa700e4e5d3f70d951475c31a2c4d85 *man/md.survnp.Rd
 1721e16ec09dc10c632dedd3c0eabd13 *man/md.survprob.Rd
 d853637b73d2bac8d9c1467da39484e9 *man/md.survtime.Rd
@@ -38,5 +39,5 @@ b309caeb2fe72b37c5b0ab84d19c6e81 *src/RcppExports.cpp
 47ed451163e14f395ca6934c0f585525 *src/init.c
 ad32212eb462bb7dc917a5fb80358880 *src/missDeaths-win.def
 96e67b1b86545c03f15800cf6e61063e *src/simcensor.cpp
-db5d63c9e07edc8f1c81f87ff68e33cc *src/survexpcache.cpp
+55d81afa6ea58e391006066e50e8cfc2 *src/survexpcache.cpp
 293e75b8324e6c330c64649fa70ee51a *src/survexpcache.h

@@ -64,9 +64,9 @@ md.survprob <- function(year, age, time, sex) {
 #' @param year year
 #' @param sex sex
 #' @export md.survdump
-#md.survdump <- function(year, sex) {
-#  SurvDump(year, sex)
-#}
+md.survdump <- function(year, sex) {
+  SurvDump(year, sex)
+}
 
 
 
